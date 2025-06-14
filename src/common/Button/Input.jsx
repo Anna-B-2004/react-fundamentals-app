@@ -1,5 +1,3 @@
-import React from "react";
-
 const Input = ({ placeholderText, labelText, onChange, ...rest }) => (
   <label>
     {labelText}
@@ -11,4 +9,5 @@ const Input = ({ placeholderText, labelText, onChange, ...rest }) => (
     />
   </label>
 );
+
 export default Input;

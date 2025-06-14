@@ -1,81 +1,54 @@
-// Module 1.
-// * figma link: https://www.figma.com/design/m0N0SGLclqUEGR6TUNvyn9/Fundamentals-Courses?node-id=2905-67147&t=OXbHXwMixWTtxRSw-1
-// * render this component inside 'Courses' component
-// * this component should display single course info:
-//   ** title;
-//   ** description;
-//   ** authors list. Authors' names should be displayed on the one line, add '...' if authors' names do not fit on one line.
-//   ** duration (format: hh:mm + 'hours'). Create function 'src/helpers/getCourseDuration.js' for duration mapping;
-//   ** creation date (format: dd.mm.yyyy). Create function 'src/helpers/formatCreationDate.js' for date formatting;
-//   ** show course button. Render 'CourseInfo' component with course's data instead of 'Courses' component
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#coursecard-component
-// * find course's authors in the 'authorsList' by ids
+import "./CourseCard.css";
+import Button from "../../../../common/Button/Button";
 
-// Module 2.
-// * remove prop 'handleShowCourse' => use 'Link' from 'react-router-dom' instead
+import trashIcon from "../CourseCard/Icon-Trash.png";
+import editIcon from "../CourseCard/Edit.png";
 
-// Module 3.
-// * add two new buttons: update and delete'. Use icons from 'src/assets/...'.
-// * remove course from the store by 'delete' button click
-// * no functionality for 'update' button for now
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-3/home-task/components#coursecard-component
-// * remove prop 'authorsList' => use 'getAuthorsSelector' to get authors from store
+import { getCourseDuration } from "../../../../helpers/getCourseDuration";
+import { formatCreationDate } from "../../../../helpers/formatCreationDate";
 
-// Module 4.
-// * show 'delete' and 'update' buttons only for ADMIN user
-// * make delete request by 'delete' button click
-// * use 'deleteCourseService' from 'src/services.js' and 'deleteCourseThunk' thunk from 'src/store/thinks/coursesThunk.js'
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-4/home-task/components#coursecard-component
+export default function CourseCard({ course, authorsList, onShowCourse }) {
+  const { id, title, description, duration, creationDate, authors } = course;
 
-// Module 5:
-// * proposed cases for unit tests:
-//   ** CourseCard should display title.
-//   ** CourseCard should display description.
-//   ** CourseCard should display duration in the correct format.
-//   ** CourseCard should display authors list.
-//   ** CourseCard should display created date in the correct format.
-
-import React from "react";
-
-import { getCourseDuration, formatCreationDate } from "../../../../helpers";
-
-import deleteIcon from "../../../../assets/deleteButtonIcon.svg";
-import editIcon from "../../../../assets/editButtonIcon.svg";
-
-import styles from "./styles.module.css";
-
-export const CourseCard = ({ course, handleShowCourse, authorsList }) => {
-  // write your code here
+  const authorNames = authors
+    .map((aId) => authorsList.find((a) => a.id === aId)?.name)
+    .filter(Boolean)
+    .join(", ");
 
   return (
-    <div className={styles.cardContainer} data-testid="courseCard">
-      <div className={styles.cardText}>
-        <h2>Title</h2>
-        <p>Description</p>
+    <article className="course-card">
+      <div className="course-card__content">
+        <h3 className="course-card__title">{title}</h3>
+        <p className="course-card__description">{description}</p>
       </div>
-      <div className={styles.cardDetails}>
-        <p>
-          <b>Authors: </b>
-          authors list
-        </p>
-        <p>
-          <b>Duration:</b>
-          <span>duration</span>
-        </p>
-        <p>
-          <b>Created: </b>
-          <span>date</span>
-        </p>
-        <div className={styles.buttonsContainer}>
-          {/* 
-				reuse Button component for 'Show course' button 
-				reuse Button	component with deleteButtonIcon from 'src/assets' for 'Delete' button
-						with data-testid="deleteCourse" 
-				reuse Button component wrapped with Link from react-router with editButtonIcon from 'src/assets' for 'Update' button with
-						data-testid="updateCourse" 
-			*/}
+
+      <div className="course-card__aside">
+        <div className="course-card__meta">
+          <p>
+            <strong>Authors:</strong> {authorNames}
+          </p>
+          <p>
+            <strong>Duration:</strong> {getCourseDuration(duration)}
+          </p>
+          <p>
+            <strong>Created:</strong> {formatCreationDate(creationDate)}
+          </p>
+        </div>
+
+        <div className="course-card__actions">
+          <Button
+            buttonText="SHOW COURSE"
+            handleClick={() => onShowCourse(id)}
+          />
+          <button className="course-card__icon-btn" aria-label="Delete course">
+            <img src={trashIcon} alt="delete" />
+          </button>
+
+          <button className="course-card__icon-btn" aria-label="Edit course">
+            <img src={editIcon} alt="edit" />
+          </button>
         </div>
       </div>
-    </div>
+    </article>
   );
-};
+}

@@ -1,0 +1,89 @@
+.course-form {
+  background: #f3f7fa;
+  min-height: calc(100vh - 60px);
+  padding: 3rem 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.course-form__card {
+  background: #fff;
+  width: 100%;
+  max-width: 900px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem 3rem;
+}
+
+.course-form__title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.course-form__section {
+  margin-bottom: 2.5rem;
+}
+
+.course-form__section h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.course-form__section label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.course-form__section textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.course-form__section input {
+  width: 100%;
+}
+
+.duration-field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.duration-display {
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.authors-section .authors-lists {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.author-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.author-item span {
+  flex: 1;
+}
+
+.course-form__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}

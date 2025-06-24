@@ -1,60 +1,51 @@
-// export const createUser = async (data) => {
-//   const response = await fetch("change with your url", {
-//     method: "POST",
-//     body: JSON.stringify(data),
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   });
+const API = "http://localhost:4000";
 
-//   if (!response.ok) {
-//     throw new Error("Network Error");
-//   }
+export async function createUser(data) {
+  const res = await fetch(`${API}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
 
-//   return await response.json();
-// };
+  if (!res.ok) {
+    throw new Error("Помилка реєстрації");
+  }
 
-// export const login = async (data) => {
-//   // write your code here
-//   return await response.json();
-// };
+  return res.json();
+}
 
-// export const getCourses = async () => {
-//   // write your code here
-//   return await response.json();
-// };
+export async function login(data) {
+  const res = await fetch(`${API}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
 
-// export const getAuthors = async () => {
-//   // write your code here
-//   return await response.json();
-// };
+  if (!res.ok) {
+    throw new Error("Невірні дані");
+  }
 
-// export const getCurrentUser = async () => {
-//   // write your code here
-//   return await response.json();
-// };
+  return res.json();
+}
 
-// export const updateCourseService = async () => {
-//   // write your code here
-//   return await response.json();
-// };
+export async function getCourses() {
+  const res = await fetch(`${API}/courses`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    throw new Error("Помилка завантаження курсів");
+  }
+  return res.json();
+}
 
-// export const logout = async () => {
-//   // write your code here
-//   return await response.json();
-// };
-
-// export const deleteCourseService = async () => {
-//   // write your code here
-//   return await response.json();
-// };
-
-// export const createCourse = async () => {
-//   // write your code here
-//   return await response.json();
-// };
-
-// export const createAuthor = async () => {
-//   // write your code here
-//   return await response.json();
-// };
+export async function getAuthors() {
+  const res = await fetch(`${API}/authors`, {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    throw new Error("Помилка завантаження авторів");
+  }
+  return res.json();
+}

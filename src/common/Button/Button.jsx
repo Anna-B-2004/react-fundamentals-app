@@ -1,21 +1,15 @@
 import React from "react";
+import "./button.css";
 
-import styles from "./styles.module.css";
+export function Button({ buttonText, text, handleClick, onClick, ...rest }) {
+  const label = buttonText ?? text ?? "Button";
+  const clickHandler = handleClick ?? onClick;
 
-// Module 1:
-// * use this component in components: Header, Courses
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#button-component
+  return (
+    <button className="btn" onClick={clickHandler} {...rest}>
+      {label}
+    </button>
+  );
+}
 
-export const Button = ({
-  buttonText,
-  handleClick,
-  "data-testid": dataTestId,
-}) => (
-  <button
-    className={styles.button}
-    onClick={handleClick}
-    data-testid={dataTestId}
-  >
-    {buttonText}
-  </button>
-);
+export default Button;

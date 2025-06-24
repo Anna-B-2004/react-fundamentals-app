@@ -1,23 +1,26 @@
-// Module 1.
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#create-input-component
-
 import React from "react";
 
-import styles from "./styles.module.css";
-
-export const Input = ({
-  placeholderText,
+export function Input({
   labelText,
+  placeholderText,
+  type = "text",
+  value,
   onChange,
-  "data-testid": dataTestId,
-}) => (
-  <label className={styles.label}>
-    {labelText}
-    <input
-      onChange={onChange}
-      placeholder={placeholderText}
-      className={styles.input}
-      data-testid={dataTestId}
-    />
-  </label>
-);
+  ...rest
+}) {
+  return (
+    <div>
+      <label htmlFor={labelText}>{labelText}</label>
+      <input
+        id={labelText}
+        type={type}
+        placeholder={placeholderText}
+        value={value}
+        onChange={onChange}
+        {...rest}
+      />
+    </div>
+  );
+}
+
+export default Input;

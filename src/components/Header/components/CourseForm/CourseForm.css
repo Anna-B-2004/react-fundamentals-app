@@ -1,0 +1,44 @@
+.course {
+  background: #eaedef;
+  padding: 60px 80px;
+  min-height: calc(100vh - 80px);
+}
+
+.course__title {
+  font: 600 28px/1 'Segoe UI', Arial, sans-serif;
+  margin-bottom: 32px;
+  color: #1d2838;
+}
+
+.course__card {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 48px;
+  background: #fff;
+  border: 1px solid #d9dfe7;
+  border-radius: 4px;
+  padding: 40px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.course__duration {
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.course__list {
+  list-style: none;
+  margin: 8px 0;
+  padding-left: 0;
+}
+
+.course__list li {
+  margin-bottom: 6px;
+}
+
+.course__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+}

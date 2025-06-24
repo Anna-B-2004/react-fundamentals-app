@@ -1,0 +1,82 @@
+.courses {
+  padding: 32px 80px;
+}
+
+.searchBar {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.searchBar input {
+  flex: 1;
+  padding: 10px 16px;
+  border: 1px solid #c9ced6;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.courseCard {
+  background: #fff;
+  border: 1px solid #d6d6d6;
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 28px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.courseCard__title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.courseCard__desc {
+  margin-bottom: 16px;
+  line-height: 1.4;
+  color: #555;
+}
+
+.courseCard__info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.courseCard__info span {
+  display: inline-block;
+  min-width: 140px;
+}
+
+.courseCard__actions {
+  display: flex;
+  gap: 12px;
+}
+.courses__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+.courses__actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 40px;
+  margin-bottom: 20px;
+}
+
+.btn-add {
+  background: #0078aa;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+
+.search-wrapper {
+  flex: 1;
+  margin-right: 16px;
+}

@@ -1,111 +1,187 @@
-// // Module 1. You don't need to do anything with this component (we had to comment this component for 1st module tests)
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Input from "../../common/Input/Input";
+import Button from "../../common/Button/Button";
+import { getCourseDuration } from "../../helpers";
+import {
+  EMPTY_COURSE,
+  mockedAuthorsList,
+  mockedCoursesList,
+} from "../../constants";
+import "./CourseForm.css";
 
-// // Module 2.
-// // * uncomment this component (ctrl + a => ctrl + /)
-// // * add functionality to create new course with:
-// //   ** title
-// //   ** description
-// //   ** duration (user enters in minutes, you should map in format «hh:mm»)
-// //   ** existing authors (use 'authorsList' prop)
-// //   ** new created author (create field and button, update 'authorsList')
-// //   ** user should be able to remove author from the course
-// //   ** add validation to the fields
-// //   ** add new course to the 'coursesList' and navigate to the '/courses' page => new course should be in the courses list
-// // ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-2/home-task/components#add-new-course
+export function CourseForm({
+  authorsList = mockedAuthorsList,
+  createCourse,
+  createAuthor,
+}) {
+  const navigate = useNavigate();
 
-// // Module 3.
-// // * remove props - authorsList, createCourse, createAuthor 
-// // * use selector from store/selectors.js to get authorsList from store
-// // * save new course to the store. Use action 'saveCourse' from 'src/store/slices/coursesSlice'
-// // * save new author to the store. Use action 'saveAuthor' from 'src/store/slices/authorsSlice'
-// // ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-3/home-task/components#add-new-course
+  const [course, setCourse] = useState({ ...EMPTY_COURSE });
+  const [authors, setAuthors] = useState(authorsList);
+  const [newAuthorName, setNewAuthorName] = useState("");
 
-// // Module 4.
-// // * render this component only for ADMIN user
-// // * in this module you should separate functionality for this component:
-// //   ** create mode:
-// //     * form for the course creation should be opened by 'courses/add' route by 'ADD NEW COURSE' button click (as before)
-// //     * make a request to save new course
-// //     * use 'createCourse' service from 'src/services.js' and 'createCourseThunk' thunk from 'src/store/thinks/coursesThunk.js'
-// //     * use 'createAuthor ' service from 'src/services.js' and 'createAuthorThunk' thunk from 'src/store/thinks/authorsThunk.js'
-// //     * save new course to the store after success response
-// // ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-4/home-task/components#add-new-course
-// //   ** update mode:
-// //     * form should be opened by route '/courses/update/:courseId' route by 'update' button click
-// //     * appropriate forms field should be prefilled with course's info
-// //     * user should have ability to modify course information in the fields and change authors list
-// //     * make a request to save updated course
-// //     * use 'updateCourseService' from 'src/services.js' and 'updateCourseThunk' thunk from 'src/store/thinks/coursesThunk.js'
-// //     save updated course to the store after success response.
-// // ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-4/home-task/components#update-course
+  const handleChange = (field) => (e) =>
+    setCourse((c) => ({ ...c, [field]: e.target.value }));
 
-// // Module 5:
-// // * proposed cases for unit tests:
-// //   ** CourseForm should show authors lists (all and course authors).
-// //   **  CourseForm 'Create author' button click should call dispatch.
-// //   **  CourseForm 'Add author' button click should add an author to the course authors list.
-// //   **  CourseForm 'Delete author' button click should delete an author from the course list.
+  const formattedDuration = getCourseDuration(Number(course.duration) || 0);
 
-// import React from "react";
+  const addAuthor = () => {
+    const name = newAuthorName.trim();
+    if (name.length < 2) return alert("Імʼя автора занадто коротке");
 
-// import styles from "./styles.module.css";
+    createAuthor && createAuthor(name);
 
-// export const CourseForm = ({ authorsList, createCourse, createAuthor }) => {
-//   //write your code here
+    const newAuthor = { id: Date.now().toString(), name };
+    setAuthors((a) => [...a, newAuthor]);
+    setCourse((c) => ({ ...c, authors: [...c.authors, newAuthor.id] }));
+    setNewAuthorName("");
+  };
 
-//   return (
-//     <div className={styles.container}>
+  const onAddAuthorToCourse = (id) => {
+    setCourse((c) => ({
+      ...c,
+      authors: c.authors.includes(id) ? c.authors : [...c.authors, id],
+    }));
+  };
 
-//       <h2>// render title - Course edit or Create page</h2>
+  const removeAuthorFromCourse = (id) => {
+    setCourse((c) => ({
+      ...c,
+      authors: c.authors.filter((a) => a !== id),
+    }));
+  };
 
-//       <form>
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const { title, description, duration, authors: courseAuth } = course;
+    if (!title || !description || !duration || courseAuth.length === 0) {
+      return alert("Заповніть усі поля");
+    }
 
-//         // reuse Input component for title field with data-testid="titleInput"
+    if (createCourse) {
+      createCourse(course);
+    } else {
+      mockedCoursesList.push({
+        ...course,
+        id: Date.now().toString(),
+        creationDate: new Date().toLocaleDateString(),
+      });
+      navigate("/courses");
+    }
+  };
 
-//         <label>
-//           Description
-//           <textarea
-//             className={styles.description}
-//             data-testid="descriptionTextArea"
-//           />
-//         </label>
+  return (
+    <section className="course-form">
+      <div className="course-form__card">
+        <h2 className="course-form__title">Course Edit/Create Page</h2>
+        <form className="course-form__form" onSubmit={onSubmit}>
+          {/* Main Info */}
+          <div className="course-form__section">
+            <h3>Main Info</h3>
+            <Input
+              label="Title"
+              data-testid="titleInput"
+              value={course.title}
+              onChange={handleChange("title")}
+            />
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              data-testid="descriptionTextArea"
+              rows={4}
+              value={course.description}
+              onChange={handleChange("description")}
+            />
+          </div>
 
-//         <div className={styles.infoWrapper}>
-//           <div>
+          <div className="course-form__section">
+            <h3>Duration</h3>
+            <div className="duration-field">
+              <Input
+                label="Duration (min)"
+                data-testid="durationInput"
+                value={course.duration}
+                onChange={handleChange("duration")}
+              />
+              <span className="duration-display">{formattedDuration}</span>
+            </div>
+          </div>
 
-//             <div className={styles.duration}>
-//               // reuse Input component with data-testid='durationInput' for duration field
+          <div className="course-form__section authors-section">
+            <h3>Authors</h3>
+            <div className="authors-create">
+              <Input
+                label="Author Name"
+                data-testid="createAuthorInput"
+                value={newAuthorName}
+                onChange={(e) => setNewAuthorName(e.target.value)}
+              />
+              <Button
+                text="CREATE AUTHOR"
+                data-testid="createAuthorButton"
+                onClick={addAuthor}
+                type="button"
+              />
+            </div>
+            <div className="authors-lists">
+              <div className="authors-list">
+                <h4>Authors List</h4>
+                {authors.map((a) => (
+                  <div key={a.id} className="author-item">
+                    <span>{a.name}</span>
+                    <Button
+                      text="ADD"
+                      data-testid="addAuthor"
+                      onClick={() => onAddAuthorToCourse(a.id)}
+                      type="button"
+                    />
+                  </div>
+                ))}
+              </div>
 
-//               <p>// render duration. use getCourseDuration helper</p>
-//             </div>
+              <div className="course-authors">
+                <h4>Course Authors</h4>
+                {course.authors.length === 0 ? (
+                  <p>Authors list is empty</p>
+                ) : (
+                  course.authors.map((id) => {
+                    const author = authors.find((x) => x.id === id);
+                    return (
+                      <div
+                        key={id}
+                        className="author-item"
+                        data-testid="authorItem"
+                      >
+                        <span>{author?.name}</span>
+                        <Button
+                          text="REMOVE"
+                          onClick={() => removeAuthorFromCourse(id)}
+                          type="button"
+                        />
+                      </div>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </div>
 
-//             <h2>Authors</h2>
-//             // use CreateAuthor component
-
-//             <div className={styles.authorsContainer}>
-//               <h3>Authors List</h3>
-
-//               // use 'map' to display all available autors. Reuse 'AuthorItem' component for each author
-//             </div>
-
-//           </div>
-
-//           <div className={styles.courseAuthorsContainer}>
-//             <h2>Course authors</h2>
-//             // use 'map' to display course autors. Reuse 'AuthorItem' component for each author
-//             <p className={styles.notification}>List is empty</p> // display this
-//             paragraph if there are no authors in the course
-//           </div>
-
-//         </div>
-
-//       </form>
-
-//       <div className={styles.buttonsContainer}>
-//         // reuse Button component for 'CREATE/UPDATE COURSE' button with
-//         // reuse Button component for 'CANCEL' button with
-//       </div>
-
-//     </div>
-//   );
-// };
+          <div className="course-form__actions">
+            <Button
+              text="CANCEL"
+              onClick={() => navigate("/courses")}
+              type="button"
+            />
+            <Button
+              text="CREATE COURSE"
+              type="submit"
+              data-testid="createCourseButton"
+            />
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+export default CourseForm;

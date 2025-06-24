@@ -1,0 +1,36 @@
+.auth {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 70px;
+  min-height: calc(100vh - 80px);
+}
+
+.auth__title {
+  font: 600 28px/1 'Segoe UI', Arial, sans-serif;
+  margin-bottom: 32px;
+  color: #1d2838;
+}
+
+.auth__card {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background: #fff;
+  border: 1px solid #d9dfe7;
+  border-radius: 4px;
+  padding: 48px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .08);
+}
+
+.auth__hint {
+  margin-top: 26px;
+  font-size: 14px;
+}
+
+.auth__hint a {
+  color: #006699;
+  font-weight: 600;
+  text-decoration: none;
+}

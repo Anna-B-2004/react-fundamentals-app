@@ -1,49 +1,58 @@
-import React from "react";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-import styles from "./styles.module.css";
+import CourseCard from "./components/CourseCard/CourseCard";
+import EmptyCourseList from "./components/EmptyCourseList/EmptyCourseList";
+import SearchBar from "./components/SearchBar/SearchBar";
 
-// Module 1:
-// * render list of components using 'CourseCard' component for each course
-// * render 'ADD NEW COURSE' button (reuse Button component)
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#courses-component
-// * render EmptyCourseList component when no courses
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#emptycourselist-component
-// * DO NOT map authors to the course inside Courses.jsx component (DO it inside CourseCard)
+import "./Courses.css";
+import { mockedCoursesList, mockedAuthorsList } from "../../constants";
 
-// Module 2:
-// * render this component by route '/courses'
-// * navigate to this component if 'localStorage' contains user's token
-// * navigate to the route courses/add by clicking 'Add New Course' button, use 'Link' component from 'react-router-dom'
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-2/home-task/components#courses
+export function Courses({
+  coursesList = mockedCoursesList,
+  authorsList = mockedAuthorsList,
+  onAddClick,
+  handleShowCourse,
+}) {
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
 
-// Module 3:
-// * stop using mocked courses and authors data
-// * delete props 'coursesList' and 'authorsList'
-// * use useSelector to get courses and authors from the store
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-3/home-task/components#courses-component
+  const filtered = query.trim()
+    ? coursesList.filter(
+        (c) =>
+          c.title.toLowerCase().includes(query.toLowerCase()) ||
+          c.id.toLowerCase().includes(query.toLowerCase())
+      )
+    : coursesList;
 
-// Module 4:
-// navigate to '/courses/add' route by clicking 'ADD NEW COURSE' button in the 'EmptyCourseList'.
-// show message 'You don't have permissions to create a course. Please log in as ADMIN' by clicking ADD NEW COURSE button in the 'EmptyCourseList'.
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-4/home-task/components#emptycourselist-component
-
-// Module 5:
-// * proposed cases for unit tests:
-//   ** Courses should display amount of CourseCard equal length of courses array.
-//   ** CourseForm should be shown after a click on the "Add new course" button.
-
-export const Courses = ({ coursesList, authorsList, handleShowCourse }) => {
-  // write your code here
-
-  // for EmptyCourseList component container use data-testid="emptyContainer" attribute
-  // for button in EmptyCourseList component add data-testid="addCourse" attribute
+  const showCourse = (id) =>
+    handleShowCourse ? handleShowCourse(id) : navigate(`/courses/${id}`);
 
   return (
-    <>
-      <div className={styles.panel}>
-        // reuse Button component for 'ADD NEW COURSE' button
+    <section className="courses">
+      <SearchBar query={query} setQuery={setQuery} />
+
+      <div className="courses__actions">
+        <Link to="/courses/add" onClick={onAddClick}>
+          <button className="btn btn-add">ADD NEW COURSE</button>
+        </Link>
       </div>
-      // use '.map' array method to render all courses. Use CourseCard component
-    </>
+
+      {filtered.length === 0 ? (
+        <EmptyCourseList onAddClick={onAddClick} />
+      ) : (
+        filtered.map((course) => (
+          <CourseCard
+            key={course.id}
+            data-testid="courseCard"
+            course={course}
+            authorsList={authorsList}
+            onShowCourse={showCourse}
+          />
+        ))
+      )}
+    </section>
   );
-};
+}
+
+export default Courses;

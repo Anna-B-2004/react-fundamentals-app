@@ -1,4 +1,2 @@
-import { getCourseDuration } from "./getCourseDuration";
-import { formatCreationDate } from "./formatCreationDate";
-
-export { getCourseDuration, formatCreationDate };
+export * from "./getCourseDuration";
+export * from "./formatCreationDate";

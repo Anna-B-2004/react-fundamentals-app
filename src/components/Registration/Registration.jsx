@@ -1,36 +1,86 @@
-// // Module 1. You don't need to do anything with this component (we had to comment this component for 1st module tests)
-//
-// // Module 2.
-// // * uncomment this component (ctrl + a => ctrl + /)
-// // * finish markup according to the figma https://www.figma.com/design/m0N0SGLclqUEGR6TUNvyn9/Fundamentals-Courses?node-id=2932-219&t=OXbHXwMixWTtxRSw-1
-// // * add validation for fields: all fields are required. Show validation message. https://www.figma.com/design/m0N0SGLclqUEGR6TUNvyn9/Fundamentals-Courses?node-id=2932-257&t=OXbHXwMixWTtxRSw-1
-// // * render this component by route '/registration'
-// // * submit form data and make POST API request '/registration'.
-// // * after successful registration navigates to '/login' route.
-// // * component should have a link to the Login page (see design)
-// // ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-2/home-task/components#registration-new-component
-//
-// import React from "react";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import Button from "../../common/Button/Button";
+import Input from "../../common/Input/Input";
+import { createUser } from "../../services";
+import "./Registration.css";
 
-// import styles from "./styles.module.css";
+export function Registration() {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+  const nav = useNavigate();
 
-// export const Registration = () => {
-//   // write your code here
+  const onSubmit = async (e) => {
+    e.preventDefault();
 
-//   return (
-//     <div className={styles.container}>
-//       <h1>Registration</h1>
-//       <div className={styles.formContainer}>
-//         <form onSubmit={handleSubmit}>
-//           // reuse Input component for email field
-//           // reuse Input component for name field
-//           // reuse Input component for password field
-//           // reuse Button component for 'Login' button
-//         </form>
-//         <p>
-//           If you have an account you may&nbsp; // use <Link /> component for navigation to Login page
-//         </p>
-//       </div>
-//     </div>
-//   );
-// };
+    const newErrors = {};
+    if (!name) newErrors.name = "Name is required";
+    if (!email) newErrors.email = "Email is required";
+    if (!password) newErrors.password = "Password is required";
+
+    if (Object.keys(newErrors).length) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      await createUser({ name, email, password });
+      nav("/login");
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  return (
+    <section className="auth">
+      <h2 className="auth__title">Registration</h2>
+      <div className="auth__card">
+        <form className="auth__form" onSubmit={onSubmit}>
+          <Input
+            labelText="Name"
+            placeholderText="Input text"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+              setErrors((prev) => ({ ...prev, name: undefined }));
+            }}
+          />
+          {errors.name && <p>{errors.name}</p>}
+
+          <Input
+            labelText="Email"
+            placeholderText="Input text"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setErrors((prev) => ({ ...prev, email: undefined }));
+            }}
+          />
+          {errors.email && <p>{errors.email}</p>}
+
+          <Input
+            labelText="Password"
+            placeholderText="Input text"
+            type="password"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setErrors((prev) => ({ ...prev, password: undefined }));
+            }}
+          />
+          {errors.password && <p>{errors.password}</p>}
+
+          <Button text="REGISTER" />
+        </form>
+      </div>
+      <p>
+        If you have an account you may&nbsp;
+        <Link to="/login">Login</Link>
+      </p>
+    </section>
+  );
+}
+
+export default Registration;

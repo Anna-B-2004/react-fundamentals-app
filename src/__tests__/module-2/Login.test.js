@@ -1,7 +1,7 @@
 import "@testing-library/jest-dom";
 import { render, fireEvent, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
-import { Login } from "../../components/Login/Login";
+import Login from "../../components/Login/Login";
 import * as services from "../../services";
 
 beforeEach(() => {

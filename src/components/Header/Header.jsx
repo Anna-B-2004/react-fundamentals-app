@@ -1,46 +1,34 @@
-import React from "react";
+import { Link, useNavigate } from "react-router-dom";
+import logo from "./components/Logo/logo 1.png";
+import "./Header.css";
 
-import styles from "./styles.module.css";
-
-// Module 1:
-// * add Logo and Button components
-// * add Header component to the App component
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#header
-
-// Module 2:
-// * show user's name if he is logged in (use selector from store/selectors.js to get user token from store)
-// * navigate to the /login route after 'LOGOUT' button click
-// * hide 'LOGOUT' button and user's name for Login and Registration pages
-// * remove token from localStorage by LOGOUT button click.
-// ** PAY ATTATION ** token should be removed from localStorage immediately inside logout handler function
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-2/home-task/components#header
-
-// Module 3:
-// * use selector from store/selectors.js to get user's name from the store
-// * remove user's data from the store. Use action 'removeUserData' from the 'src/store/slices/userSlice by LOGOUT button click
-// * remove token from localStorage by LOGOUT button click.
-// ** PAY ATTATION ** token should be removed from localStorage immediately inside logout handler function
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-3/home-task/components#header
-
-// Module 4:
-// make a request to lod out on 'LOGOUT' button click
-// use thunk 'logoutThunk' from 'src/store/thunks/userThunk.js' and service 'logout' from 'src/services.js'
-// ** PAY ATTATION ** token should be removed from localStorage immediately inside logout handler function
-
-// Module 5:
-// *proposed cases for unit tests:
-//   ** Header should have logo and user's name.
-
-export const Header = () => {
-  // write your code here
+export function Header() {
+  const nav = useNavigate();
+  const token = localStorage.getItem("token");
+  const userName = localStorage.getItem("userName");
 
   return (
-    <div className={styles.headerContainer}>
-      // use Logo component
-      <div className={styles.userContainer}>
-        <p className={styles.userName}>Harry Potter</p>
-        // reuse Button component for 'Login / Logout' button
-      </div>
-    </div>
+    <header className="header">
+      <Link to="/courses" className="logo">
+        <img src={logo} alt="Logo" />
+      </Link>
+
+      {token && (
+        <div className="header__right">
+          <span className="header__username">{userName}</span>
+          <button
+            className="btn header__logout"
+            onClick={() => {
+              localStorage.clear();
+              nav("/login");
+            }}
+          >
+            LOGOUT
+          </button>
+        </div>
+      )}
+    </header>
   );
-};
+}
+
+export default Header;

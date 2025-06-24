@@ -1,9 +1,3 @@
-import React from "react";
-
-import styles from "./styles.module.css";
-
-// Module 1:
-// * add logo.svg as a logo image
-// ** TASK DESCRIPTION ** - https://react-fundamentals-tasks.vercel.app/docs/module-1/home-task/components#logo-component
-
-export const Logo = () => <img className={styles.logo} alt="logo" />;
+import logo from "D:/React_HW1/src/components/Header/components/Logo/logo 1.png";
+const Logo = () => <img src={logo} alt="Courses logo" />;
+export default Logo;
